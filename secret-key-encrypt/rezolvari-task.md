@@ -275,3 +275,50 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
 
   ```
   #### Check the output, kinda similar plaintext ==> kinda similar encryption ==> can be reverse engineered
+
+  # Task 6.2 Common Mistake: Use the Same IV
+  ```
+  Plaintext (P1): This is a known message! 
+  Ciphertext (C1): a469b1c502c1cab966965e50425438e1bb1b5f9037a4c159 
+  Plaintext (P2): (unknown to you) 
+  Ciphertext (C2): bf73bcd3509299d566c35b5d450337e1bb175f903fafc159
+  ```
+
+  Use the python3 program **sample_code.py** from ./Files but modify it a bit.
+
+  ```
+  #!/usr/bin/python3
+  
+  # XOR two bytearrays
+  def xor(first, second):
+     return bytearray(x^y for x,y in zip(first, second))
+  
+  MSG = "This is a known message!"
+  HEX_1 = "a469b1c502c1cab966965e50425438e1bb1b5f9037a4c159"
+  HEX_2 = "bf73bcd3509299d566c35b5d450337e1bb175f903fafc159"
+  
+  # Convert ascii string to bytearray
+  D1 = bytes(MSG, 'utf-8')
+  
+  # Convert hex string to bytearray
+  D2 = bytearray.fromhex(HEX_1)
+  D3 = bytearray.fromhex(HEX_2)
+  
+  r1 = xor(D1, D2)
+  r2 = xor(r1, D3)
+  print(r1.hex())
+  print(r2.hex()
+  ```
+
+  ```
+  ./Labsetup/Files
+  python3 sample_code.py
+  f001d8b622a8b99907b6353e2d2356c1d67e2ce356c3a478
+  4f726465723a204c61756e63682061206d697373696c6521
+
+  ./Labsetup/Files
+  echo -n "4f726465723a204c61756e63682061206d697373696c6521" | xxd -r -p 
+  Order: Launch a missile!
+  ```
+
+  ### Using CFB, the final message is partially revealed: ```Order: Launch a ...```
