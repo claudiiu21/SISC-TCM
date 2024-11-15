@@ -103,10 +103,16 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
   ### ECB vs. CBC
   From the generated pictures it is very easy to see that the ECB mode is much more unsafe than the CBC mode. It's quite easy to see which was the original image in the case of the ECB mode, can't say the same for CBC.
   
-  # Task 4: Padding
+  # Task 4 Padding
   ### For block ciphers, when the size of a plaintext is not a multiple of the block size, padding may be required. The PKCS#5 padding scheme is widely used by many block ciphers (see Chapter 21.4 of the SEED book for details). We will conduct the following experiments to understand how this type of padding works:
 
   ### ECB
+
+  ```
+  echo -n "12345" > f1.txt
+  echo -n "1234512345" > f2.txt
+  echo -n "1234512345123456" > f3.txt
+  ```
 
   ```
   ./Labsetup/Task4
