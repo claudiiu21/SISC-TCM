@@ -1,4 +1,4 @@
-# Task 1
+# Task 1 Frequency Analysis
 
 ### In the first task, we are introduced to the Random Substitution Cipher, meaning each letter in the original text is replaced by another letter, where the replacement does not vary.
 
@@ -27,7 +27,7 @@ Next, go to /Files/cipher.txt, in order to decypher this use:
 ``` tr 'abcdefghijklmnopqrstuvwxyz' 'cfmypvbrlqxwiejdsgkhnazotu' < ciphertext.txt > plaintext.txt ```
 
 
-# Task 2
+# Task 2 Encryption using Different Ciphers and Modes
 
 ### In this task, we will play with various encryption algorithms and modes. You can use the following openssl enc command to encrypt/decrypt a file. To see the manuals, you can type man openssl and man enc.
 For the same ```plain.txt``` file use at least 3 different ciphers:
@@ -66,7 +66,7 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
   -K 00112233445566778889aabbccddeeff -iv 0102030405060708
   ```
 
-  # Task 3
+  # Task 3 Encryption Mode– ECB vs. CBC
   ### The file pic original.bmp is included in the Labsetup.zip file, and it is a simple picture. We would like to encrypt this picture, so people without the encryption keys cannot know what is in the picture. Please encrypt the file using the ECB (Electronic Code Book) and CBC (Cipher Block Chaining) modes, and then do the following:
 
   ### ECB Encryption
@@ -166,7 +166,7 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
   Run all the previous command but OFB instead of CFB
   #### ==> OFB mode does not need padding (Stream cipher)
 
-  # Task 5
+  # Task 5 Error Propagation– Corrupted Cipher Text
   ### To understand the error propagation property of various encryption modes, we would like to do the following exercise:
   ### 1. Create a text file that is at least 1000 bytes long.
   ### 2. Encrypt the file using the AES-128 cipher.
@@ -176,6 +176,7 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
   ### ECB
 
   ```
+  ./Labsetup/Task5
   a.  python3 -c "print('A' * 1500, end='')" > test.txt 
   b.  openssl enc -aes-128-ecb -e -p -in test.txt -out test_ecb_enc.txt -K 00112233445566778889aabbccddeeff   
   c.  bless test_ecb_enc.txt  --> change the 55th byte -> check offset:55
@@ -188,6 +189,7 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
 
   ### CBC
   ```
+  ./Labsetup/Task5
   a. SAME
   b. openssl enc -aes-128-cbc -e -p -in test.txt -out test_cbc_enc.txt -K 00112233445566778889aabbccddeeff -iv 0102030405060708
   c. bless test_cbc_enc.txt
@@ -201,6 +203,7 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
 
   ### CFB
   ```
+  ./Labsetup/Task5
   a. SAME
   b. openssl enc -aes-128-cfb -e -p -in test.txt -out test_cfb_enc.txt -K 00112233445566778889aabbccddeeff -iv 0102030405060708
   c. bless test_cfb_enc.txt
@@ -215,6 +218,7 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
 
   ### OFB
   ```
+  ./Labsetup/Task5
   a. SAME
   b. openssl enc -aes-128-ofb -e -p -in test.txt -out test_ofb_enc.txt -K 00112233445566778889aabbccddeeff -iv 0102030405060708
   c. bless_test_ofb_enc.txt
@@ -228,4 +232,46 @@ For the same ```plain.txt``` file use at least 3 different ciphers:
 
   ### Final conclusion
   #### The error propagation is bigger in CBC, due to the high dependency between each block in the deciphering process, then on the CFB and ECB (similar kinda) and finally OFB, where the dependency is minimum.
+
+  # Task 6.1 IV Experiment
+  ### A basic requirement for IV is uniqueness, which means that no IV may be reused under the same key. To understand why, please encrypt the same plaintext using (1) two different IVs, and (2) the same IV. Please describe your observation, based on which, explain why IV needs to be unique.
+
+  ```
+  File A
+  gedit file1.txt --> Hello world, welcome to cryptography...
+
+  File B
+  gedit file2.txt --> Hello world, welcome to cryptography class and whatever whatever ever...
+  ```
+  File B plaintext is similar to File A, but after encryption they should not be alike.
   
+  ### Different IVs and same key
+  ```
+  File A
+  openssl enc -aes-128-ofb -d -p -in file1.txt -out test_ofc_enc_6.1.1.txt
+  -K 00112233445566778889aabbccddeeff -iv 0102030405060708
+
+  openssl enc -aes-128-ofb -d -p -in file1.txt -out test_ofc_enc_6.1.2.txt
+  -K 00112233445566778889aabbccddeeff -iv 0102030406070809
+
+  File B
+  openssl enc -aes-128-ofb -d -p -in file2.txt -out test_ofc_enc_6.1.3.txt
+  -K 00112233445566778889aabbccddeeff -iv 0102030405060708
+
+  openssl enc -aes-128-ofb -d -p -in file2.txt -out test_ofc_enc_6.1.4.txt
+  -K 00112233445566778889aabbccddeeff -iv 0102030406070809
+  ```
+  #### Check each output and you can see, even though text is similar, the output is very different.
+
+  ### Same IVs and same key
+    ```
+  File A
+  openssl enc -aes-128-ofb -d -p -in file1.txt -out test_ofc_enc_6.1.1IV.txt
+  -K 00112233445566778889aabbccddeeff -iv 0102030405060708
+
+  File B
+  openssl enc -aes-128-ofb -d -p -in file2.txt -out test_ofc_enc_6.1.2IV.txt
+  -K 00112233445566778889aabbccddeeff -iv 0102030405060708
+
+  ```
+  #### Check the output, kinda similar plaintext ==> kinda similar encryption ==> can be reverse engineered
