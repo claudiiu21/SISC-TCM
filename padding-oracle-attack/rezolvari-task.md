@@ -40,7 +40,7 @@
   ### ==> CBC mode uses paddings
   ### SAME for f2.txt, f3.txt
 
-  # Task 2 Getting Familiar with Padding
+  # Task 2 Padding Oracle Attack (Level 1)
 
   ## TURN ON DOCKER
   ```
@@ -230,7 +230,7 @@
       print("P2:  " + P2.hex())
   ```
   
-  # Task 3 Getting Familiar with Padding
+  # Task 3 Padding Oracle Attack (Level 2)
 
   ### Prerequisites: type into terminal (required for program to work)
   ```
