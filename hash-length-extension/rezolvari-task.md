@@ -26,22 +26,22 @@ Construct and send a benign request to the server:
 2. Calculate the MAC of the key concatenated with request content `R`, that is
 
 ```
-Key:R = 123456:myname=koji&uid=1001&lstcmd=1
+Key:R = 123456:myname=clau&uid=1001&lstcmd=1
 ```
 
-Suppose that the name used here is "koji" and it requests for listing all the files in `LabHome` folder.
+Suppose that the name used here is "clau" and it requests for listing all the files in `LabHome` folder.
 
 So the MAC is calculated as:
 
 ```sh
-echo -n "123456:myname=koji&uid=1001&lstcmd=1" | sha256sum
-#66357225216e2e9d1eb27b44fcfaa4c60f9955a7f1318ce5e757c9ef07e6c92d  -
+echo -n "123456:myname=clau&uid=1001&lstcmd=1" | sha256sum
+#e77ba23ca2f3071eebf615a3eab38b47fb741ece13d8082cc37c62af32661f00  -
 ```
 
 Thus the complete request is:
 
 ```
-http://www.seedlab-hashlen.com/?myname=koji&uid=1001&lstcmd=1&mac=66357225216e2e9d1eb27b44fcfaa4c60f9955a7f1318ce5e757c9ef07e6c92d
+http://www.seedlab-hashlen.com/?myname=koji&uid=1001&lstcmd=1&mac=e77ba23ca2f3071eebf615a3eab38b47fb741ece13d8082cc37c62af32661f00
 ```
 
 *Don't use `curl` or `wget`, it doesn't support. Just open a Firefox browser via VNC client and visit the url link above.*
@@ -53,7 +53,7 @@ The web looks like:
 For a download request, we take a similar strategy to construct:
 
 ```
-http://www.seedlab-hashlen.com/?myname=koji&uid=1001&lstcmd=1&download=secret.txt&mac=35e5980662296f9ab0456211ec02f0274fc0a70ed6a6e3c68f8995be4f2e6e62
+http://www.seedlab-hashlen.com/?myname=clau&uid=1001&lstcmd=1&download=secret.txt&mac=e77ba23ca2f3071eebf615a3eab38b47fb741ece13d8082cc37c62af32661f00
 ```
 
 ![](./download.png)
@@ -62,14 +62,14 @@ http://www.seedlab-hashlen.com/?myname=koji&uid=1001&lstcmd=1&download=secret.tx
 
 Construct the padding for 
 ```
-123456:myname=koji&uid=1001&lstcmd=1
+123456:myname=clau&uid=1001&lstcmd=1
 ```
 
 Use Python REPL to complete this work:
 
 ```sh
 python
->>> payload = bytearray("123456:myname=koji&uid=1001&lstcmd=1",'utf8')
+>>> payload = bytearray("123456:myname=clau&uid=1001&lstcmd=1",'utf8')
 >>> len(payload)
 36
 >>> length_field = (len(payload)*8).to_bytes(8,'big')
@@ -94,7 +94,7 @@ gcc calculate_mac.c -o calculate_mac -lcrypto
 It gives:
 
 ```
-14797c6db7ca0309d20e0b3c54ac19df60861a83fe64b2713a45e18469b5f3fc
+64f16899eb5ab234f29cde7bc949511060e495edb3676fcf6bf6241c6b1bf69
 ```
 
 ---
@@ -116,7 +116,7 @@ sudo apt install libssl-dev
 Then, visit
 
 ```
-http://www.seedlab-hashlen.com/?myname=koji&uid=1001&lstcmd=1%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%20&download=secret.txt&mac=14797c6db7ca0309d20e0b3c54ac19df60861a83fe64b2713a45e18469b5f3fc
+http://www.seedlab-hashlen.com/?myname=clau&uid=1001&lstcmd=1%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%20&download=secret.txt&mac=64f16899eb5ab234f29cde7bc949511060e495edb3676fcf6bf6241c6b1bf69
 ```
 
 ![](./padding.png)
