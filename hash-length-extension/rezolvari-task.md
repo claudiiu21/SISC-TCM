@@ -128,20 +128,20 @@ Alternatively, to distinguish from the existing work, we turn to apply the `1002
 A legitimate request to list files without MAC value:
 
 ```
-http://www.seedlab-hashlen.com/?myname=MUR&uid=1002&lstcmd=1
+http://www.seedlab-hashlen.com/?myname=clau&uid=1002&lstcmd=1
 ```
 
 can be calculated by
 
 ```sh
-echo -n "983abe:myname=MUR&uid=1002&lstcmd=1" | sha256sum
-# 3a286321c4cb101ce172c1377a75a4ccf46ad9ff4fc8680ec582fa1d004da2e2  -
+echo -n "983abe:myname=clau&uid=1002&lstcmd=1" | sha256sum
+# 112f6b12cc37fa1b3bfc2ad2d2f8e00640b6924d1456ec5d5c5e486b64b54f6b  -
 ```
 
 Assume that we have already observed the full request URL as
 
 ```
-http://www.seedlab-hashlen.com/?myname=MUR&uid=1002&lstcmd=1&mac=3a286321c4cb101ce172c1377a75a4ccf46ad9ff4fc8680ec582fa1d004da2e2
+http://www.seedlab-hashlen.com/?myname=clau&uid=1002&lstcmd=1&mac=112f6b12cc37fa1b3bfc2ad2d2f8e00640b6924d1456ec5d5c5e486b64b54f6b
 ```
 
 But we do not know the mac key of it. So we use [`length_ext.c`](./length_ext.c) to obtain the MAC after appending `"&download=secret.txt"` argument. Compile and run:
@@ -149,7 +149,7 @@ But we do not know the mac key of it. So we use [`length_ext.c`](./length_ext.c)
 ```sh
 gcc length_ext.c -o length_ext -lcrypto
 ./length_ext
-# bcea031dd94604d9b84e4886aab8e083b6ba2ec66f50316555cf1cb451bf4aed
+# a454cff7ac411d226616e71f4be9dce7158263eb5db8b72ff43a376cefb1a43f
 ```
 
 Then, construct the padding of the original message as [task-2](#task-2), recall that we don't know what the mac key exactly is but we know the length of keys are fixed, so we can easily calculate the padding:
@@ -160,13 +160,15 @@ python
 >>> length_field = (len(payload)*8).to_bytes(8,'big')
 >>> padding = b'\x80' + b'\x00'*(64-len(payload)-1-8) + length_field
 >>> print(''.join('%{:02x}'.format(x) for x in padding))
-%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%18
+%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%20
+
+
 ```
 
 So the full request is:
 
 ```
-http://www.seedlab-hashlen.com/?myname=MUR&uid=1002&lstcmd=1%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%18&download=secret.txt&mac=bcea031dd94604d9b84e4886aab8e083b6ba2ec66f50316555cf1cb451bf4aed
+http://www.seedlab-hashlen.com/?myname=clau&uid=1002&lstcmd=1%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%20&download=secret.txt&mac=a454cff7ac411d226616e71f4be9dce7158263eb5db8b72ff43a376cefb1a43f
 ```
 
 ![](./mur.png)
