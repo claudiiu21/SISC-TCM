@@ -94,7 +94,7 @@ gcc calculate_mac.c -o calculate_mac -lcrypto
 It gives:
 
 ```
-64f16899eb5ab234f29cde7bc949511060e495edb3676fcf6bf6241c6b1bf69
+64f16899eb5ab2343f29cde7bc949511060e495edb3676fcf6bf6241c6b1bf69
 ```
 
 ---
@@ -116,7 +116,7 @@ sudo apt install libssl-dev
 Then, visit
 
 ```
-http://www.seedlab-hashlen.com/?myname=clau&uid=1001&lstcmd=1%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%20&download=secret.txt&mac=64f16899eb5ab234f29cde7bc949511060e495edb3676fcf6bf6241c6b1bf69
+http://www.seedlab-hashlen.com/?myname=clau&uid=1001&lstcmd=1%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%20&download=secret.txt&mac=64f16899eb5ab2343f29cde7bc949511060e495edb3676fcf6bf6241c6b1bf69
 ```
 
 ![](./padding.png)
