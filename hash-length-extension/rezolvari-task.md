@@ -177,22 +177,10 @@ http://www.seedlab-hashlen.com/?myname=clau&uid=1002&lstcmd=1%80%00%00%00%00%00%
 
 Keyed-hash mesaage authentication code (HMAC) can be used as the follwing example:
 
-```sh
-python
->>> import hmac
->>> import hashlib
->>> key = '123456'
->>> message = 'myname=koji&uid=1001&lstcmd=1'
->>> hmac.new(bytearray(key.encode('utf8')), msg=message.encode('utf-8',
-... 'surrogateescape'), digestmod=hashlib.sha256).hexdigest()
-'e216c440b3a152d0a8b62e54076863080bc4febe69299ec3aa420c43033cde10'
-```
-
-Or
 
 ```sh
-echo -n "myname=koji&uid=1001&lstcmd=1" | openssl dgst -sha256 -hmac "123456"
-# (stdin)= e216c440b3a152d0a8b62e54076863080bc4febe69299ec3aa420c43033cde10
+echo -n "myname=clau&uid=1001&lstcmd=1" | openssl dgst -sha256 -hmac "123456"
+# (stdin)= 082f4b1b60c84284ced68720fc7968025bd646ee297c8ab035742080fb7cdcfc
 ```
 
 HMAC works as the figure below shows:
