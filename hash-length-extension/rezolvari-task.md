@@ -41,7 +41,7 @@ echo -n "123456:myname=clau&uid=1001&lstcmd=1" | sha256sum
 Thus the complete request is:
 
 ```
-http://www.seedlab-hashlen.com/?myname=koji&uid=1001&lstcmd=1&mac=e77ba23ca2f3071eebf615a3eab38b47fb741ece13d8082cc37c62af32661f00
+http://www.seedlab-hashlen.com/?myname=clau&uid=1001&lstcmd=1&mac=e77ba23ca2f3071eebf615a3eab38b47fb741ece13d8082cc37c62af32661f00
 ```
 
 *Don't use `curl` or `wget`, it doesn't support. Just open a Firefox browser via VNC client and visit the url link above.*
